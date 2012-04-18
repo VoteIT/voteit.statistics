@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+from pyramid import testing
+
 
 class StatisticsTests(TestCase):
 
