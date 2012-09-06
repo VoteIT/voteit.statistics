@@ -46,7 +46,7 @@ class StatisticsView(BaseView):
         return results
 
 
-@view_action('meeting', 'statistics', title = _(u"Statistics"), link = "@@statistics")
+@view_action('meeting', 'statistics', title = _(u"Statistics"), link = "statistics")
 def statistics_menu_link(context, request, va, **kw):
     """ Show a link to the statistics page in the  meeting menu """
     api = kw['api']

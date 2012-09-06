@@ -73,7 +73,7 @@ class StatisticsViewTests(TestCase):
         self.config.include('voteit.statistics')
         obj = self._cut(root['m'], request)
         res = obj.api.render_single_view_component(root['m'], request, 'meeting', 'statistics')
-        self.assertEqual(res, u'<li><a href="http://example.com/m/@@statistics">Statistics</a></li>')
+        self.assertEqual(res, u'<li><a href="http://example.com/m/statistics">Statistics</a></li>')
 
 
 class StatisticsTests(TestCase):
