@@ -18,6 +18,20 @@ This package has no persistence what so ever, so it won't change anything in
 VoteIT and will be removed completely when it isn't included.
 
 
+Configuration
+=============
+
+The only option available right now is to change the content types that should display statistics.
+
+  statistics.ctypes = <list of content types here>
+
+Will default to:
+
+  statistics.ctypes =
+    Proposal
+    Discussion
+    Vote
+
 Feedback, questions, bugs etc?
 ------------------------------
 

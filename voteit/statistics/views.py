@@ -21,10 +21,13 @@ class StatisticsView(BaseView):
             This might be a CPU expensive view, so be carefull.
         """
         userids = find_authorized_userids(self.api.meeting, [VIEW])
-        ctypes = [DiscussionPost.content_type, Proposal.content_type, Vote.content_type]
-        display_names = {'DiscussionPost': DiscussionPost.display_name,
-                         'Proposal': Proposal.display_name,
-                         'Vote': Vote.display_name}
+        ctypes = self.request.registry.settings.get('statistics.ctypes',
+                                                    'Proposal\nDiscussionPost\nVote')
+        ctypes = ctypes.strip().splitlines()
+        display_names = {}
+        for ctype in ctypes:
+            factory = self.api.get_content_factory(ctype)
+            display_names[ctype] = getattr(factory._callable, 'display_name', ctype)
         results = []
         for ctype in ctypes:
             results.append(dict(stats = self.get_user_stats(userids, ctype),
@@ -44,6 +47,7 @@ class StatisticsView(BaseView):
             if num:
                 results[userid] = num
         return results
+
 
 
 @view_action('meeting', 'statistics', title = _(u"Statistics"), link = "statistics")
