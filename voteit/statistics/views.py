@@ -24,22 +24,33 @@ class StatisticsView(BaseView):
         ctypes = self.request.registry.settings.get('statistics.ctypes',
                                                     'Proposal\nDiscussionPost\nVote')
         ctypes = ctypes.strip().splitlines()
-        display_names = {}
-        for ctype in ctypes:
-            factory = self.api.get_content_factory(ctype)
-            display_names[ctype] = getattr(factory._callable, 'display_name', ctype)
         results = []
         for ctype in ctypes:
+            factory = self.api.get_content_factory(ctype)
             results.append(dict(stats = self.get_user_stats(userids, ctype),
                                 ctype = ctype,
-                                display_name = display_names[ctype]))
+                                display_name = getattr(factory._callable, 'display_name', ctype)))
         self.response['userids'] = userids
         self.response['results'] = results
         return self.response
 
     def get_user_stats(self, userids, content_type):
+        """ This method is now tweaked which might look funny. The reason for this is that it
+            was written when votes were part of the catalog. Nowdays they aren't. Hence the split.
+        """
         path = resource_path(self.api.meeting)
         results = {}
+        if content_type == u'Vote':
+            for docid in self.api.search_catalog(path = path, content_type = u'Poll')[1]:
+                poll = self.api.resolve_catalog_docid(docid)
+                for vote in poll.get_content(content_type = u'Vote'):
+                    creator = vote.creators[0]
+                    if creator not in userids:
+                        continue
+                    current = results.setdefault(creator, 0)
+                    results[creator] = current + 1
+            return results
+        #Default
         for userid in userids:
             num = self.api.search_catalog(path = path,
                                           content_type = content_type,
@@ -47,7 +58,6 @@ class StatisticsView(BaseView):
             if num:
                 results[userid] = num
         return results
-
 
 
 @view_action('meeting', 'statistics', title = _(u"Statistics"), link = "statistics")

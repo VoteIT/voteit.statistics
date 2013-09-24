@@ -7,7 +7,7 @@
       i18n:domain="voteit.statistics">
 <body>
     <h2 i18n:translate="">Meeting statistics</h2>
-    <div metal:fill-slot="content" class="content_wrapper">
+    <div metal:fill-slot="content">
         <table class="listing">
             <thead>
                 <tr>
