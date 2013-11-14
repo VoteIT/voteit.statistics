@@ -1,6 +1,9 @@
 voteit.statistics README
 ========================
 
+.. image:: https://travis-ci.org/VoteIT/voteit.statistics.png?branch=master
+    :target: https://travis-ci.org/VoteIT/voteit.statistics
+
 Show some statistics for user contributions, like number of proposals,
 discussion posts or other things users have done.
 
